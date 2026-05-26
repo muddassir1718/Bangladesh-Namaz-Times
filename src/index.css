@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri&family=Inter:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary-green: #105221;
+  --color-accent-gold: #d4a323;
+  --color-gold-hover: #b88616;
+  --color-light-bg: #f8faf7;
+  --color-dark-bg: #070c08;
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.font-arabic {
+  font-family: 'Amiri', serif;
+}
+
+/* Islamic Geometric grid pattern for background decoration */
+.islamic-pattern {
+  background-color: #f8faf7;
+  background-image: radial-gradient(rgba(16, 82, 33, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.dark .islamic-pattern {
+  background-color: #070c08;
+  background-image: radial-gradient(rgba(212, 163, 35, 0.018) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+}
+
+/* Scrollbar styling */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 2s linear infinite;
+}
+

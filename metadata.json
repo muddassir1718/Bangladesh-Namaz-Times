@@ -1,0 +1,6 @@
+{
+  "name": "Bangladesh Namaz Times",
+  "description": "A comprehensive bilingual prayer times, Qibla, Tasbih, Zakat, Hijri, and Bangla calendar web application offline-first for Bangladesh.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
