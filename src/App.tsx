@@ -21,7 +21,7 @@ import TasbihComponent from './components/Tasbih';
 import CalendarComponent from './components/CalendarComponent';
 import ZakatCalculator from './components/ZakatCalculator';
 import PrayerTracker from './components/PrayerTracker';
-import SettingsPanel from './components/SettingsPanel';
+import SettingsPanel, { MUEZZIN_LIST } from './components/SettingsPanel';
 import RamadanDashboard from './components/RamadanDashboard';
 import { HIJRI_MONTH_VIRTUES, DAILY_HADITH_DUAS } from './data/hijriLessons';
 
@@ -29,10 +29,13 @@ import { HIJRI_MONTH_VIRTUES, DAILY_HADITH_DUAS } from './data/hijriLessons';
 const DEFAULT_SETTINGS: AppSettings = {
   language: 'bn',
   theme: 'dark',
+  colorPalette: 'emerald',
   madhab: 'shafi',
   calcMethod: 'MWL',
   clockFormat: '12h',
   volume: 0.8,
+  selectedMuezzin: 'makkah',
+  hapticFeedback: true,
   notificationSettings: {}
 };
 
@@ -113,7 +116,10 @@ export default function App() {
       const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       root.classList.add(sysDark ? 'dark' : 'light');
     }
-  }, [settings.theme]);
+
+    // Set custom brand color palette
+    root.setAttribute('data-palette', settings.colorPalette || 'emerald');
+  }, [settings.theme, settings.colorPalette]);
 
   // 3. Live ticking timer every 1s
   useEffect(() => {
@@ -269,8 +275,9 @@ export default function App() {
 
     try {
       setIsAdjanPlaying(true);
-      // Play Hosted Adhan MP3 standard
-      const audioUrl = 'https://www.islamcan.com/audio/adhan/azan1.mp3';
+      // Play selected Muezzin Adhan MP3
+      const selectedObj = MUEZZIN_LIST.find(m => m.id === settings.selectedMuezzin);
+      const audioUrl = selectedObj ? selectedObj.audioUrl : 'https://www.islamcan.com/audio/adhan/azan1.mp3';
       const audio = new Audio(audioUrl);
       audio.volume = settings.volume;
       setAdjanAudioObj(audio);
@@ -479,6 +486,9 @@ export default function App() {
       updated = updated.filter(x => x !== id);
     } else {
       updated.push(id);
+      if (settings.hapticFeedback && typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(35);
+      }
     }
     setSavedDuaIds(updated);
     localStorage.setItem('namaz_times_bookmarks_v1', JSON.stringify(updated));
@@ -491,6 +501,9 @@ export default function App() {
   const copyContentDua = (dua: any) => {
     const text = `🕌 ${settings.language === 'bn' ? dua.titleBn : dua.titleEn} 🕌\n\nArabic:\n${dua.arabic}\n\nPhonetic Pronunciation:\n${settings.language === 'bn' ? dua.pronunciationBn : dua.pronunciationEn}\n\nMeaning:\n${settings.language === 'bn' ? dua.meaningBn : dua.meaningEn}\n\nShared via Bangladesh Namaz Times App.`;
     navigator.clipboard.writeText(text).then(() => {
+      if (settings.hapticFeedback && typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(25);
+      }
       showToast('কপি করা হয়েছে!', 'Content copied successfully!');
     });
   };

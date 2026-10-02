@@ -2,11 +2,47 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-green: #105221;
-  --color-accent-gold: #d4a323;
-  --color-gold-hover: #b88616;
+  --color-primary-green: var(--brand-primary, #105221);
+  --color-accent-gold: var(--brand-accent, #d4a323);
+  --color-gold-hover: var(--brand-accent-hover, #b88616);
   --color-light-bg: #f8faf7;
   --color-dark-bg: #070c08;
+}
+
+:root {
+  --brand-primary: #105221;
+  --brand-accent: #d4a323;
+  --brand-accent-hover: #b88616;
+}
+
+[data-palette="emerald"] {
+  --brand-primary: #105221;
+  --brand-accent: #d4a323;
+  --brand-accent-hover: #b88616;
+}
+
+[data-palette="midnight"] {
+  --brand-primary: #0f172a;
+  --brand-accent: #38bdf8;
+  --brand-accent-hover: #0284c7;
+}
+
+[data-palette="turquoise"] {
+  --brand-primary: #0f766e;
+  --brand-accent: #f59e0b;
+  --brand-accent-hover: #d97706;
+}
+
+[data-palette="sepia"] {
+  --brand-primary: #78350f;
+  --brand-accent: #d97706;
+  --brand-accent-hover: #b45309;
+}
+
+[data-palette="royal"] {
+  --brand-primary: #3730a3;
+  --brand-accent: #fb7185;
+  --brand-accent-hover: #e11d48;
 }
 
 @layer base {
@@ -54,4 +90,3 @@
 .animate-spin-slow {
   animation: spin-slow 2s linear infinite;
 }
-

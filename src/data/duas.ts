@@ -67,11 +67,44 @@ export const DUAS_LIST: DuaItem[] = [
     category: 'prayer',
     titleBn: 'দুরুদ শরিফ',
     titleEn: 'Durood Ibrahim',
-    arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمિदٌ مَجِيدٌ',
+    arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
     pronunciationBn: 'আল্লাহুম্মা সাল্লি আলা মুহাম্মাদিওঁ ওয়া আলা আলি মুহাম্মদ, কামা সাল্লাইতা আলা ইব্রাহিমা ওয়া আলা আলি ইব্রাহিম, ইন্নাকা হামিদুম মাজিদ। আল্লাহুম্মা বারিক আলা মুহাম্মাদিওঁ ওয়া আলা আলি মুহাম্মদ, কামা বারাকতা আলা ইব্রাহিমা ওয়া আলা আলি ইব্রাহিম, ইন্নাকা হামিদুম মাজিদ।',
     pronunciationEn: 'Allahumma salli \'ala Muhammad wa \'ala ali Muhammad, kama sallayta \'ala Ibrahima wa \'ala ali Ibrahima, innaka Hamidum Majid. Allahumma barik \'ala Muhammad wa \'ala ali Muhammad, kama barakta \'ala Ibrahima wa \'ala ali Ibrahima, innaka Hamidum Majid.',
     meaningBn: 'হে আল্লাহ! মুহাম্মদ (সা.) ও তাঁর বংশধরদের ওপর শান্তি বর্ষণ করুন, যেমন শান্তি বর্ষণ করেছিলেন ইব্রাহিম ও তাঁর বংশধরদের ওপর। নিশ্চয়ই আপনি প্রশংসিত ও মহিমান্বিত। হে আল্লাহ! মুহাম্মদ (সা.) ও তাঁর বংশধরদের ওপর বরকত বর্ষণ করুন, যেমন বরকত বর্ষণ করেছিলেন ইব্রাহিম ও তাঁর বংশধরদের ওপর। নিশ্চয়ই আপনি প্রশংসিত ও মহিমান্বিত।',
     meaningEn: 'O Allah, bestow Your favor upon Muhammad and upon the family of Muhammad, as You bestowed favor upon Ibrahim and upon the family of Ibrahim. Verily, You are Full of Praise, Most Glorious. O Allah, bless Muhammad and the family of Muhammad, as You blessed Ibrahim and the family of Ibrahim. Verily, You are Full of Praise, Most Glorious.'
+  },
+  {
+    id: 'p7',
+    category: 'prayer',
+    titleBn: 'দোয়ায়ে মাসুরা (নামাজের শেষ বৈঠকে পঠিত)',
+    titleEn: 'Dua Masoora',
+    arabic: 'اللَّهُمَّ إِنِّي ظَلَمْتُ نَفْسِي ظُلْمًا كَثِيرًا وَلَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ فَاغْفِرْ لِي مَغْفِرَةً مِنْ عِنْدِكَ وَارْحَمْنِي إِنَّكَ أَنْتَ الْغَفُورُ الرَّحِيمُ',
+    pronunciationBn: 'আল্লাহুম্মা ইন্নি জালামতু নাফসি জুলমান কাসিরাওঁ ওয়ালা ইয়াগফিরুজ জুনুবা ইল্লা আনতা, ফাগফির লি মাগফিরাতাম মিন ইনদিকা ওয়ারহামনি, ইন্নাকা আনতাল গাফুরুর রাহিম।',
+    pronunciationEn: 'Allahumma inni zalamtu nafsi zulman kathiran wa la yaghfirudh-dhunuba illa Anta, faghfir li maghfiratam-min \'indika warhamni, innaka Antal-Ghafoorur-Raheem.',
+    meaningBn: 'হে আল্লাহ! আমি আমার নিজের ওপর অনেক অবিচার করেছি। আপনি ব্যতীত গুনাহ ক্ষমা করার আর কেউ নেই। অতএব আপনি আমাকে নিজ অনুগ্রহে ক্ষমা করে দিন এবং আমার ওপর দয়া করুন। নিশ্চয়ই আপনি ক্ষমাশীল ও পরম দয়ালু।',
+    meaningEn: 'O Allah, I have wronged myself greatly and none forgives sins except You, so grant me forgiveness from You and have mercy on me. Indeed, You are the Forgiving, the Merciful.'
+  },
+  {
+    id: 'p8',
+    category: 'prayer',
+    titleBn: 'দোয়ায়ে কুনুত (বিতর নামাজে পঠিত)',
+    titleEn: 'Dua Qunut (Witr Prayer)',
+    arabic: 'اللَّهُمَّ إِنَّا نَسْتَعِينُكَ وَنَسْتَغْفِرُكَ وَنُؤْمِنُ بِكَ وَنَتَوَكَّلُ عَلَيْكَ وَنُثْنِي عَلَيْكَ الْخَيْرَ وَنَشْكُرُكَ وَلَا نَكْفُرُكَ وَنَخْلَعُ وَنَتْرُكُ مَنْ يَفْجُرُكَ ، اللَّهُمَّ إِيَّاكَ نَعْبُدُ وَلَكَ نُصَلِّي وَنَسْجُدُ وَإِلَيْكَ نَسْعَى وَنَحْفِدُ وَنَرْجُو رَحْمَتَكَ وَنَخْشَى عَذَابَكَ إِنَّ عَذَابَكَ بِالْكُفَّارِ مُلْحِقٌ',
+    pronunciationBn: 'আল্লাহুম্মা ইন্না নাসতাঈনুকা ওয়ানাসতাগফিরুকা ওয়া নু’মিনু বিকা ওয়া নাতাওয়াক্কালু ‘আলাইকা ওয়া নুছনি ‘আলাইকাল খাইরা ওয়া নাশকুরুকা ওয়ালা নাকফুরুকা ওয়া নাখলা‘উ ওয়া নাতরুকু মাইঁ ইয়াফজুরুক। আল্লাহুম্মা ইয়্যাকা না‘বুদু ওয়া লাকা নুসল্লি ওয়া নাসজুদু ওয়া ইলাইকা নাস‘আ ওয়া নাহফিদু ওয়া নারজু রাহমাতাকা ওয়া নাখশা ‘আজাবাকা إِنَّ ‘আজাবাকা বিল কুফফারি মুলহিক্ব।',
+    pronunciationEn: 'Allahumma inna nasta\'inuka wa nastaghfiruka wa nu\'minu bika wa natawakkalu \'alaika wa nuthni \'alaikal-khaira wa nashkuruka wa la nakfuruka wa nakhla\'u wa natruku mai-yafjuruk. Allahumma iyyaka na\'budu wa laka nusalli wa nasjudu wa ilaika nas\'a wa nahfidu wa narju rahmataka wa nakhsha \'adhabaka inna \'adhabaka bil-kuffari mulhiq.',
+    meaningBn: 'হে আল্লাহ! আমরা আপনার সাহায্য ও ক্ষমা প্রার্থনা করছি। আপনার প্রতি ঈমান রাখছি এবং আপনার ওপর ভরসা করছি। আপনার উত্তম প্রশংসা করছি এবং কৃতজ্ঞতা জ্ঞাপন করছি, আপনার অবাধ্য হচ্ছি না। যারা আপনার অবাধ্য হয় তাদের পরিত্যাগ করছি। হে আল্লাহ! আমরা কেবল আপনারই ইবাদত করি, আপনার জন্যই নামাজ পড়ি ও সিজদা করি। আপনার দিকেই ধাবিত হই। আমরা আপনার রহমতের আশা করি এবং শাস্তিকে ভয় করি। নিশ্চয়ই আপনার শাস্তি কাফেরদের জন্য অবধারিত।',
+    meaningEn: 'O Allah, we seek Your help and Your forgiveness, and we believe in You and rely upon You, and we praise You well and thank You, and we are not ungrateful to You. We forsake and leave whoever disobeys You. O Allah, You alone we worship, and to You we pray and prostrate, and to You we strive and hasten. We hope for Your mercy and fear Your punishment. Indeed, Your punishment will overtake the disbelievers.'
+  },
+  {
+    id: 'p9',
+    category: 'prayer',
+    titleBn: 'দুই সিজদার মধ্যবর্তী দোয়া',
+    titleEn: 'Between Two Prostrations',
+    arabic: 'رَبِّ اغْفِرْ لِي ، رَبِّ اغْفِرْ لِي ، وَارْحَمْنِي ، وَاهْدِنِي ، وَارْزُقْنِي ، وَعَافِنِي',
+    pronunciationBn: 'রাব্বিগফির লি, রাব্বিগফির লি, ওয়ারহামনি, ওয়াহদিনি, ওয়ারযুক্বনি, ওয়া আফিনি।',
+    pronunciationEn: 'Rabbighfir li, Rabbighfir li, warhamni, wahdini, warzuqni, wa \'afini.',
+    meaningBn: 'হে আমার প্রতিপালক! আমাকে ক্ষমা করুন, আমাকে ক্ষমা করুন, আমার ওপর দয়া করুন, আমাকে হেদায়েত দান করুন, আমাকে রিজিক দান করুন এবং আমাকে সুস্থতা ও নিরাপত্তা দান করুন।',
+    meaningEn: 'O my Lord, forgive me; O my Lord, forgive me; have mercy on me, guide me, provide for me, and give me wellness.'
   },
 
   // 2. Morning/Evening Azkar (3)
@@ -124,7 +157,7 @@ export const DUAS_LIST: DuaItem[] = [
   {
     id: 'f2',
     category: 'food',
-    titleBn: ' শুরুতে বিসমিল্লাহ ভুলে গেলে',
+    titleBn: 'শুরুতে বিসমিল্লাহ ভুলে গেলে',
     titleEn: 'Forgot Bismillah',
     arabic: 'بِسْمِ اللَّهِ فِي أَوَّلِهِ وَآخِرِهِ',
     pronunciationBn: 'বিসমিল্লাহি ফি আওয়ালিহি ওয়া আখিরিহি।',
@@ -281,7 +314,7 @@ export const DUAS_LIST: DuaItem[] = [
     category: 'durood',
     titleBn: 'দরূদে ইব্রাহিম (নামাজে পঠিত দরূদ)',
     titleEn: 'Durood Ibrahim (Recited in Prayer)',
-    arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّদٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
+    arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ',
     pronunciationBn: 'আল্লাহুম্মা সাল্লি আলা মুহাম্মাদিওঁ ওয়া আলা আলি মুহাম্মদ, কামা সাল্লাইতা আলা ইব্রাহিমা ওয়া আলা আলি ইব্রাহিম, ইন্নাকা হামিদুম মাজিদ। আল্লাহুম্মা বারিক আলা মুহাম্মাদিওঁ ওয়া আলা আলি মুহাম্মদ, কামা বারাকতা আলা ইব্রাহিমা ওয়া আলা আলি ইব্রাহিম, ইন্নাকা হামিদুম মাজিদ।',
     pronunciationEn: 'Allahumma salli \'ala Muhammad wa \'ala ali Muhammad, kama sallayta \'ala Ibrahima wa \'ala ali Ibrahima, innaka Hamidum Majid. Allahumma barik \'ala Muhammad wa \'ala ali Muhammad, kama barakta \'ala Ibrahima wa \'ala ali Ibrahima, innaka Hamidum Majid.',
     meaningBn: 'হে আল্লাহ! মুহাম্মদ (সা.) ও তাঁর বংশধরদের ওপর শান্তি বর্ষণ করুন, যেমন শান্তি বর্ষণ করেছিলেন ইব্রাহিম ও তাঁর বংশধরদের ওপর। নিশ্চয়ই আপনি প্রশংসিত ও মহিমান্বিত। হে আল্লাহ! মুহাম্মদ (সা.) ও তাঁর বংশধরদের ওপর বরকত বর্ষণ করুন, যেমন বরকত বর্ষণ করেছিলেন ইব্রাহিম ও তাঁর বংশধরদের ওপর। নিশ্চয়ই আপনি প্রশংসিত ও মহিমান্বিত।',
@@ -387,5 +420,60 @@ export const DUAS_LIST: DuaItem[] = [
     pronunciationEn: 'Rabbi zidni \'ilma.',
     meaningBn: 'হে আমার প্রতিপালক! আমার জ্ঞান বৃদ্ধি করে দিন।',
     meaningEn: 'My Lord, increase me in knowledge.'
+  },
+  {
+    id: 'ne7',
+    category: 'morning-evening',
+    titleBn: 'আয়াতুল কুরসী (সর্বশ্রেষ্ঠ আয়াত ও সুরক্ষার দোয়া)',
+    titleEn: 'Ayat al-Kursi (The Throne Verse)',
+    arabic: 'اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ وَلَا يَئُودُهُ حِفْظُهُمَا وَهُوَ الْعَلِيُّ الْعَظِيمُ',
+    pronunciationBn: 'আল্লাহু লা ইলাহা ইল্লা হুওয়াল হাইয়্যুল ক্বাইয়্যুম, লা তা’খুযুহু সিনাতুঁও ওয়ালা নাওম, লাহু মা ফিস সামাওয়াতি ওয়ামা ফিল আরদ্ব, মান যাল্লাযী ইয়্যাশফা’উ ইনদাহু ইল্লা বিইযনিহ, ইয়া’লামু মা বাইনা আইদীহিম ওয়ামা খালফাহুম, ওয়ালা ইউহীতূনা বিশাইইম মিন ইলমিহী ইল্লা বিমা শা-আ, ওয়াসি’আ কুরসিয়্যুহুস সামাওয়াতি ওয়াল আরদ্ব, ওয়ালা ইয়ায়ূদুহু হিফজুহুমা, ওয়াহুওয়াল ‘আলিইয়্যুল ‘আজীম।',
+    pronunciationEn: 'Allahu la ilaha illa Huwal-Hayyul-Qayyum, la ta\'khudhuhu sinatun wa la nawm, lahu ma fis-samawati wa ma fil-ard, man dhal-ladhi yashfa\'u \'indahu illa bi-idhnihi, ya\'lamu ma bayna aydihim wa ma khalfahum, wa la yuhitoona bi-shay\'im-min \'ilmihi illa bima sha\'a, wasi\'a kursiyyuhus-samawati wal-ard, wa la ya\'uduhu hifzuhuma, wa Huwal-\'Aliyyul-\'Azeem.',
+    meaningBn: 'আল্লাহ, যিনি ছাড়া কোনো উপাস্য নেই; তিনি চিরঞ্জীব, চিরস্থায়ী। তন্দ্রা বা নিদ্রা তাঁকে স্পর্শ করে না। আসমান ও জমিনে যা কিছু আছে সব তাঁরই। কে সেই ব্যক্তি যে তাঁর অনুমতি ছাড়া তাঁর কাছে সুপারিশ করবে? তাদের সামনে ও পেছনে যা কিছু আছে তা তিনি জানেন। তাঁর জ্ঞানের কোনো কিছুই তারা আয়ত্ত করতে পারে না, তবে তিনি যতটুকু ইচ্ছা করেন। তাঁর কুরসী সমস্ত আসমান ও জমিন পরিবেষ্টিত করে আছে। আর এই উভয়ের সংরক্ষণ তাঁর জন্য কোনো কঠিন কাজ নয়। তিনিই সর্বোচ্চ ও মহান।',
+    meaningEn: 'Allah! There is no deity except Him, the Ever-Living, the Sustainer of existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great.'
+  },
+  {
+    id: 'ne8',
+    category: 'necessary',
+    titleBn: 'টয়লেটে প্রবেশের দোয়া',
+    titleEn: 'Entering the Restroom',
+    arabic: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ',
+    pronunciationBn: 'আল্লাহুম্মা ইন্নি আউজুবিকা মিনাল খুবুসি ওয়াল খাবায়িস।',
+    pronunciationEn: 'Allahumma inni a\'udhu bika minal-khubuthi wal-khaba\'ith.',
+    meaningBn: 'হে আল্লাহ! আমি আপনার কাছে পুরুষ ও নারী শয়তানের অনিষ্ট থেকে আশ্রয় চাই।',
+    meaningEn: 'O Allah, I seek refuge with You from the male and female evil spirits.'
+  },
+  {
+    id: 'ne9',
+    category: 'necessary',
+    titleBn: 'টয়লেট থেকে বের হওয়ার দোয়া',
+    titleEn: 'Leaving the Restroom',
+    arabic: 'غُفْرَانَكَ ، الْحَمْدُ لِلَّهِ الَّذِي أَذْهَبَ عَنِّي الْأَذَى وَعَافَانِي',
+    pronunciationBn: 'গুফরানাকা, আলহামদুলিল্লাহিল লাজি আজহাবা আন্নিল আজা ওয়া আফানি।',
+    pronunciationEn: 'Ghufranaka, alhamdu lillahil-ladhi adh-haba \'annil-adha wa \'afani.',
+    meaningBn: 'হে আল্লাহ! আপনার কাছে ক্ষমা প্রার্থনা করছি। সকল প্রশংসা আল্লাহর জন্য যিনি আমার কষ্টদায়ক বস্তু দূর করলেন এবং আমাকে সুস্থতা ও স্বস্তি দান করলেন।',
+    meaningEn: 'I seek Your forgiveness. Praise be to Allah who removed hardship from me and granted me relief.'
+  },
+  {
+    id: 'ne10',
+    category: 'food',
+    titleBn: 'ইফতারের দোয়া',
+    titleEn: 'Dua for Breaking Fast (Iftar)',
+    arabic: 'ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ',
+    pronunciationBn: 'জাহাবাজ জামাউ ওয়াবতাল্লাতিল উরুকু ওয়া ছাবাতাল আজরু ইনশাআল্লাহ।',
+    pronunciationEn: 'Zhahabadh-dhama\'u wabtallatil-\'urooqu wa thabatal-ajru in sha Allah.',
+    meaningBn: 'পিপাসা নিবৃত্ত হলো, শিরা-উপশিরা সিক্ত হলো এবং ইনশাআল্লাহ সওয়াবও নির্ধারিত হলো।',
+    meaningEn: 'The thirst has gone, the veins are moistened, and the reward is confirmed, if Allah wills.'
+  },
+  {
+    id: 'ne11',
+    category: 'hardship',
+    titleBn: 'রোগমুক্তির দোয়া (শিফা)',
+    titleEn: 'Dua for Healing and Recovery',
+    arabic: 'اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَاسَ اشْفِ أَنْتَ الشَّافِي لَا شِفَاءَ إِلَّا شِفَاؤُكَ شِفَاءً لَا يُغَادِرُ سَقَمًا',
+    pronunciationBn: 'আল্লাহুম্মা রাব্বান নাস, আজহিবিল বাস, ইশফি আনতাশ শাফি, লা শিফাআ ইল্লা শিফাউকা, শিফাআন লা ইউগাদিরু সাক্বামা।',
+    pronunciationEn: 'Allahumma Rabban-nas, adh-hibil-ba\'s, ishfi Antash-Shafi, la shifa\'a illa shifa\'uka, shifa\'an la yughadiru saqama.',
+    meaningBn: 'হে আল্লাহ! মানবজাতির প্রতিপালক! কষ্ট দূর করে দিন এবং রোগ নিরাময় করে দিন, আপনিই নিরাময়কারী। আপনার নিরাময় ছাড়া আর কোনো নিরাময় নেই, এমন নিরাময় যা কোনো রোগ অবশিষ্ট রাখে না।',
+    meaningEn: 'O Allah, Lord of mankind, remove the suffering and heal, for You are the Healer. There is no healing except Your healing, a cure that leaves no disease.'
   }
 ];

@@ -5,19 +5,23 @@
 
 export type Language = 'bn' | 'en';
 export type Theme = 'light' | 'dark' | 'auto';
+export type ColorPalette = 'emerald' | 'midnight' | 'turquoise' | 'sepia' | 'royal';
 export type Madhab = 'shafi' | 'hanafi' | 'maliki' | 'hanbali';
 export type CalcMethod = 'ISNA' | 'MWL' | 'Egypt' | 'Karachi' | 'UmmAlQura';
 
 export interface AppSettings {
   language: Language;
   theme: Theme;
+  colorPalette?: ColorPalette;
   madhab: Madhab;
   calcMethod: CalcMethod;
   notificationSettings: Record<string, { enabled: boolean; type: 'audio' | 'beep' | 'silent'; timerBefore: number }>;
   clockFormat: '12h' | '24h';
   volume: number;
+  selectedMuezzin?: 'makkah' | 'madinah' | 'alaqsa' | 'mishary' | 'egypt';
   fontSize?: 'sm' | 'md' | 'lg' | 'xl';
   hijriOffset?: number;
+  hapticFeedback?: boolean;
 }
 
 export interface District {
