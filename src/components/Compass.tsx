@@ -192,13 +192,15 @@ export default function Compass({ userLat, userLng, locationName, language }: Co
   };
 
   const attachOrientationListeners = () => {
-    // Prefer absolute device orientation on Android Chrome
     const win = window as any;
     if (typeof win !== 'undefined') {
-      if ('ondeviceorientationabsolute' in win) {
-        win.addEventListener('deviceorientationabsolute', handleOrientation, true);
-      } else {
+      try {
+        if ('ondeviceorientationabsolute' in win) {
+          win.addEventListener('deviceorientationabsolute', handleOrientation, true);
+        }
         win.addEventListener('deviceorientation', handleOrientation, true);
+      } catch (e) {
+        console.warn('Error attaching orientation listeners:', e);
       }
     }
   };
@@ -301,6 +303,32 @@ export default function Compass({ userLat, userLng, locationName, language }: Co
           </button>
         </div>
       </div>
+
+      {/* Sensor Activation Prompt for Mobile Devices */}
+      {sensorStatus !== 'granted' && !manualMode && (
+        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-900 dark:text-emerald-100 rounded-2xl text-xs flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+          <div className="flex items-center gap-2.5">
+            <Smartphone className="w-5 h-5 text-emerald-600 dark:text-accent-gold shrink-0 animate-bounce" />
+            <div>
+              <p className="font-bold text-sm">
+                {language === 'bn' ? 'মোবাইল কম্পাস সেন্সর সক্রিয় করুন' : 'Activate Mobile Compass Sensors'}
+              </p>
+              <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                {language === 'bn'
+                  ? 'মোবাইলের ম্যাগনেটোমিটার সেন্সর চালু করতে নিচের বাটনে ট্যাপ করুন'
+                  : 'Tap below to permit device orientation and start real-time magnetic compass'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={startSensorListener}
+            className="py-2 px-4 bg-primary-green hover:bg-[#135f28] text-white rounded-xl font-bold text-xs cursor-pointer shadow-sm transition active:scale-95 shrink-0 flex items-center gap-1.5"
+          >
+            <CompassIcon className="w-4 h-4 text-accent-gold" />
+            <span>{language === 'bn' ? 'সেন্সর চালু করুন' : 'Start Sensor'}</span>
+          </button>
+        </div>
+      )}
 
       {/* Tilt warning alert if phone is not held flat */}
       {!isFlat && !manualMode && (

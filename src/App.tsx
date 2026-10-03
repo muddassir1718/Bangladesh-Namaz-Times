@@ -13,7 +13,7 @@ import {
 import { AppSettings, Language, Theme, Madhab, CalcMethod, District, PrayerTime } from './types';
 import { DISTRICTS_LIST } from './data/districts';
 import { DUAS_LIST } from './data/duas';
-import { calculatePrayerTimes, checkForbiddenStatus, toBanglaNum, formatCountdown } from './utils/calculations';
+import { calculatePrayerTimes, checkForbiddenStatus, toBanglaNum, formatCountdown, formatCountdownHMS } from './utils/calculations';
 import { getHijriDate, getBanglaDate } from './utils/calendar';
 
 import CompassComponent from './components/Compass';
@@ -29,7 +29,27 @@ import { HIJRI_MONTH_VIRTUES, DAILY_HADITH_DUAS } from './data/hijriLessons';
 const DEFAULT_SETTINGS: AppSettings = {
   language: 'bn',
   theme: 'dark',
-  colorPalette: 'emerald',
+  preset: 'madina-emerald',
+  customPrimary: '#0F6B4F',
+  customAccent: '#D4AF37',
+  customBgLight: '#F4F8F5',
+  customBgDark: '#07150C',
+  customText: '#111827',
+  customTextSecondary: '#4B5563',
+  customBorder: '#163D24',
+  backgroundPattern: '8-point-star',
+  buttonShape: 'soft-rounded',
+  buttonBgStyle: 'solid-vibrant',
+  buttonTextColor: 'bright-white',
+  customButtonTextColor: '#FFFFFF',
+  buttonShadow: 'subtle-shadow',
+  buttonHoverEffect: 'smooth-lift',
+  fontFamily: 'sans',
+  fontColorTone: 'default',
+  ambientMotionEnabled: true,
+  motionIntensity: 'calm',
+  showFloatingParticles: true,
+  showRotatingRosette: true,
   madhab: 'shafi',
   calcMethod: 'MWL',
   clockFormat: '12h',
@@ -117,9 +137,50 @@ export default function App() {
       root.classList.add(sysDark ? 'dark' : 'light');
     }
 
-    // Set custom brand color palette
-    root.setAttribute('data-palette', settings.colorPalette || 'emerald');
-  }, [settings.theme, settings.colorPalette]);
+    // Set attributes for CSS styling
+    root.setAttribute('data-preset', settings.preset || 'madina-emerald');
+    root.setAttribute('data-pattern', settings.backgroundPattern || '8-point-star');
+    root.setAttribute('data-btn-shape', settings.buttonShape || 'soft-rounded');
+    root.setAttribute('data-btn-bg-style', settings.buttonBgStyle || 'solid-vibrant');
+    root.setAttribute('data-btn-text', settings.buttonTextColor || 'bright-white');
+    root.setAttribute('data-btn-shadow', settings.buttonShadow || 'subtle-shadow');
+    root.setAttribute('data-btn-hover', settings.buttonHoverEffect || 'smooth-lift');
+    root.setAttribute('data-font-family', settings.fontFamily || 'sans');
+    root.setAttribute('data-font-tone', settings.fontColorTone || 'default');
+    root.setAttribute('data-motion-enabled', String(settings.ambientMotionEnabled !== false));
+    root.setAttribute('data-motion-intensity', settings.motionIntensity || 'calm');
+
+    // Set custom CSS variables
+    if (settings.customPrimary) root.style.setProperty('--brand-primary', settings.customPrimary);
+    if (settings.customAccent) root.style.setProperty('--brand-accent', settings.customAccent);
+    if (settings.customBgDark) root.style.setProperty('--brand-bg-dark', settings.customBgDark);
+    if (settings.customBgLight) root.style.setProperty('--brand-bg-light', settings.customBgLight);
+    if (settings.customText) root.style.setProperty('--brand-text-custom', settings.customText);
+    if (settings.customTextSecondary) root.style.setProperty('--brand-text-sec', settings.customTextSecondary);
+    if (settings.customBorder) root.style.setProperty('--brand-border', settings.customBorder);
+    if (settings.customButtonTextColor) root.style.setProperty('--custom-btn-text', settings.customButtonTextColor);
+  }, [
+    settings.theme,
+    settings.preset,
+    settings.customPrimary,
+    settings.customAccent,
+    settings.customBgDark,
+    settings.customBgLight,
+    settings.customText,
+    settings.customTextSecondary,
+    settings.customBorder,
+    settings.backgroundPattern,
+    settings.buttonShape,
+    settings.buttonBgStyle,
+    settings.buttonTextColor,
+    settings.customButtonTextColor,
+    settings.buttonShadow,
+    settings.buttonHoverEffect,
+    settings.fontFamily,
+    settings.fontColorTone,
+    settings.ambientMotionEnabled,
+    settings.motionIntensity
+  ]);
 
   // 3. Live ticking timer every 1s
   useEffect(() => {
@@ -342,53 +403,63 @@ export default function App() {
     settings.calcMethod
   );
 
-  // Calulate Current / Next Prayer status and countdowns
+  // Calculate Current / Next Prayer status and precise countdowns with seconds
   const calculateCurrentNextPrayer = () => {
     const currentH = currentTime.getHours();
     const currentM = currentTime.getMinutes();
-    const totalMinutesNow = currentH * 60 + currentM;
+    const currentS = currentTime.getSeconds();
+    const totalSecondsNow = currentH * 3600 + currentM * 60 + currentS;
 
-    // Convert HH:MM list to relative minutes
-    const timesWithMins = dateTimesOfToday.map(p => {
+    // Convert HH:MM list to relative seconds
+    const timesWithSecs = dateTimesOfToday.map(p => {
       const [h, m] = p.time.split(':').map(Number);
       return {
         ...p,
+        secs: h * 3600 + m * 60,
         mins: h * 60 + m
       };
     });
 
     // Fard prayers sorted chronologically
-    const fardTimes = timesWithMins.filter(p => p.type === 'fard');
+    const fardTimes = timesWithSecs.filter(p => p.type === 'fard');
 
     let currentPrayer = fardTimes[fardTimes.length - 1]; // default Isha
     let nextPrayer = fardTimes[0]; // default Fajr of tomorrow
-    let minutesRemaining = 0;
+    let secondsRemaining = 0;
 
     for (let i = 0; i < fardTimes.length; i++) {
-      if (totalMinutesNow >= fardTimes[i].mins) {
+      if (totalSecondsNow >= fardTimes[i].secs) {
         currentPrayer = fardTimes[i];
         if (i < fardTimes.length - 1) {
           nextPrayer = fardTimes[i + 1];
-          minutesRemaining = nextPrayer.mins - totalMinutesNow;
+          secondsRemaining = nextPrayer.secs - totalSecondsNow;
         } else {
           // next prayer is tomorrow's Fajr
           nextPrayer = fardTimes[0];
-          minutesRemaining = (24 * 60 - totalMinutesNow) + nextPrayer.mins;
+          secondsRemaining = (24 * 3600 - totalSecondsNow) + nextPrayer.secs;
         }
       }
     }
 
     // Edge case before 1st prayer (Fajr)
-    if (totalMinutesNow < fardTimes[0].mins) {
+    if (totalSecondsNow < fardTimes[0].secs) {
       currentPrayer = fardTimes[fardTimes.length - 1]; // Still Isha theoretically
       nextPrayer = fardTimes[0];
-      minutesRemaining = nextPrayer.mins - totalMinutesNow;
+      secondsRemaining = nextPrayer.secs - totalSecondsNow;
     }
 
-    return { currentPrayer, nextPrayer, minutesRemaining };
+    const countdownHMS = formatCountdownHMS(secondsRemaining, settings.language);
+
+    return {
+      currentPrayer,
+      nextPrayer,
+      secondsRemaining,
+      minutesRemaining: Math.floor(secondsRemaining / 60),
+      countdownHMS
+    };
   };
 
-  const { currentPrayer, nextPrayer, minutesRemaining } = calculateCurrentNextPrayer();
+  const { currentPrayer, nextPrayer, secondsRemaining, minutesRemaining, countdownHMS } = calculateCurrentNextPrayer();
 
   // Get forbidden status checks of today
   const sunriseObj = dateTimesOfToday.find(p => p.id === 'sunrise')!;
@@ -540,7 +611,29 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-light-bg dark:bg-dark-bg text-gray-900 dark:text-gray-100 flex flex-col md:flex-row transition-colors duration-500 islamic-pattern ${FONT_SIZE_CLASSES[settings.fontSize || 'md']}`}>
+    <div className={`min-h-screen bg-light-bg dark:bg-dark-bg text-gray-900 dark:text-gray-100 flex flex-col md:flex-row transition-colors duration-500 islamic-pattern ${FONT_SIZE_CLASSES[settings.fontSize || 'md']} relative overflow-x-hidden`}>
+
+      {/* Ambient Floating Crescent & Star Particles */}
+      {settings.ambientMotionEnabled !== false && settings.showFloatingParticles !== false && (
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden islamic-motion-item">
+          <div className="absolute top-12 right-16 opacity-30 dark:opacity-20 animate-float-crescent select-none">
+            <span className="text-4xl text-accent-gold filter drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]">🌙</span>
+          </div>
+          <div className="absolute top-32 left-1/4 opacity-40 animate-twinkle text-accent-gold text-sm select-none">✦</div>
+          <div className="absolute top-2/3 right-1/3 opacity-30 animate-twinkle text-accent-gold text-xs select-none" style={{ animationDelay: '1.5s' }}>✧</div>
+          <div className="absolute bottom-24 left-16 opacity-35 animate-float-particle text-accent-gold text-sm select-none" style={{ animationDelay: '2s' }}>★</div>
+          <div className="absolute top-1/2 right-12 opacity-25 animate-float-particle text-accent-gold text-base select-none" style={{ animationDelay: '3.5s' }}>✦</div>
+        </div>
+      )}
+
+      {/* Rotating 8-Point Geometric Rosette Watermark */}
+      {settings.ambientMotionEnabled !== false && settings.showRotatingRosette !== false && (
+        <div className="fixed -bottom-32 -right-32 pointer-events-none z-0 w-96 h-96 opacity-[0.035] dark:opacity-[0.05] animate-spin-slow text-accent-gold flex items-center justify-center select-none islamic-motion-item">
+          <svg viewBox="0 0 200 200" className="w-full h-full fill-current">
+            <path d="M100 0 L125 45 L175 25 L155 75 L200 100 L155 125 L175 175 L125 155 L100 200 L75 155 L25 175 L45 125 L0 100 L45 75 L25 25 L75 45 Z" />
+          </svg>
+        </div>
+      )}
 
       {/* Global Toast Alert banner */}
       {toastMessage && (
@@ -632,23 +725,77 @@ export default function App() {
             <ChevronRight className="w-3.5 h-3.5 opacity-60" />
           </button>
 
-          <button
-            onClick={() => {
-              setActiveTab('more');
-              setMoreSubTab('duas');
-            }}
-            className={`flex items-center justify-between p-3.5 rounded-2xl text-xs uppercase tracking-wider font-bold transition-all pointer-events-auto cursor-pointer ${
-              activeTab === 'more'
-                ? 'bg-white/10 text-white border-l-4 border-accent-gold pl-4 shadow-inner'
-                : 'text-white/70 hover:bg-white/5 hover:text-white hover:pl-3.5'
-            }`}
-          >
-            <span className="flex items-center gap-3">
-              <BookOpen className="w-4 h-4 text-accent-gold" />
-              {settings.language === 'bn' ? 'অন্যান্য আমল' : 'More Features'}
-            </span>
-            <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-          </button>
+          <div>
+            <button
+              onClick={() => {
+                setActiveTab('more');
+              }}
+              className={`w-full flex items-center justify-between p-3.5 rounded-2xl text-xs uppercase tracking-wider font-bold transition-all pointer-events-auto cursor-pointer ${
+                activeTab === 'more'
+                  ? 'bg-white/10 text-white border-l-4 border-accent-gold pl-4 shadow-inner'
+                  : 'text-white/70 hover:bg-white/5 hover:text-white hover:pl-3.5'
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <BookOpen className="w-4 h-4 text-accent-gold" />
+                {settings.language === 'bn' ? 'অন্যান্য আমল' : 'More Features'}
+              </span>
+              <ChevronRight className={`w-3.5 h-3.5 transition-transform ${activeTab === 'more' ? 'rotate-90 text-accent-gold' : 'opacity-60'}`} />
+            </button>
+
+            {/* Direct Sub-links for desktop sidebar */}
+            {activeTab === 'more' && (
+              <div className="mt-1 ml-4 pl-3 border-l-2 border-accent-gold/30 flex flex-col gap-1 py-1 animate-in fade-in duration-200">
+                <button
+                  onClick={() => setMoreSubTab('duas')}
+                  className={`text-left py-1.5 px-2.5 rounded-xl text-[11px] font-bold transition cursor-pointer flex items-center gap-2 ${
+                    moreSubTab === 'duas'
+                      ? 'bg-accent-gold/20 text-accent-gold font-black'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>📖</span>
+                  <span>{settings.language === 'bn' ? 'আমল ও দোয়া ভান্ডার' : 'Duas & Azkar'}</span>
+                </button>
+
+                <button
+                  onClick={() => setMoreSubTab('zakat')}
+                  className={`text-left py-1.5 px-2.5 rounded-xl text-[11px] font-bold transition cursor-pointer flex items-center gap-2 ${
+                    moreSubTab === 'zakat'
+                      ? 'bg-accent-gold/20 text-accent-gold font-black'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>৳</span>
+                  <span>{settings.language === 'bn' ? 'জাকাত ক্যালকুলেটর' : 'Zakat Calculator'}</span>
+                </button>
+
+                <button
+                  onClick={() => setMoreSubTab('tracker')}
+                  className={`text-left py-1.5 px-2.5 rounded-xl text-[11px] font-bold transition cursor-pointer flex items-center gap-2 ${
+                    moreSubTab === 'tracker'
+                      ? 'bg-accent-gold/20 text-accent-gold font-black'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>📊</span>
+                  <span>{settings.language === 'bn' ? 'নামাজ ট্র্যাকার' : 'Prayer Tracker'}</span>
+                </button>
+
+                <button
+                  onClick={() => setMoreSubTab('settings')}
+                  className={`text-left py-1.5 px-2.5 rounded-xl text-[11px] font-bold transition cursor-pointer flex items-center gap-2 ${
+                    moreSubTab === 'settings'
+                      ? 'bg-accent-gold/20 text-accent-gold font-black'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
+                  }`}
+                >
+                  <span>⚙️</span>
+                  <span>{settings.language === 'bn' ? 'থিম ও সেটিংস' : 'Theme & Settings'}</span>
+                </button>
+              </div>
+            )}
+          </div>
         </nav>
 
         {/* Sidebar Footer Location Indicator */}
@@ -738,7 +885,7 @@ export default function App() {
             <button
               onClick={handleToggleLanguage}
               id="quick-lang-toggle"
-              className="py-1.5 px-3.5 bg-primary-green hover:bg-[#256e2a] active:scale-[0.98] text-white dark:bg-primary-green border border-accent-gold/25 text-xs font-bold rounded-full pointer-events-auto cursor-pointer shadow-sm transition"
+              className="theme-btn py-1.5 px-3.5 text-xs font-bold pointer-events-auto cursor-pointer shadow-sm transition"
             >
               {settings.language === 'bn' ? 'EN' : 'বাংলা'}
             </button>
@@ -774,11 +921,19 @@ export default function App() {
             />
 
             {/* 2. Hero Interactive digital clocks */}
-            <div className="bg-primary-green text-white rounded-3xl p-8 border border-accent-gold/20 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden select-none">
+            <div className="bg-primary-green text-white rounded-3xl p-6 md:p-8 border border-accent-gold/20 shadow-xl flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden select-none">
               
-              {/* Majestic Geometric overlays from theme instructions */}
-              <div className="absolute top-0 right-0 w-[500px] h-[500px] border-[24px] border-white/5 rounded-full -mr-64 -mt-64 pointer-events-none"></div>
-              <div className="absolute top-0 right-0 w-[400px] h-[400px] border border-accent-gold/10 rotate-45 -mr-40 -mt-40 pointer-events-none"></div>
+              {/* Islamic Motion elements */}
+              {settings.islamicMotion !== 'off' && (
+                <div className="absolute top-4 right-8 pointer-events-none islamic-motion-item select-none animate-float-crescent opacity-75 hidden sm:block">
+                  <span className="text-3xl filter drop-shadow-[0_0_12px_rgba(212,163,35,0.7)]">🌙</span>
+                  <span className="text-xs text-accent-gold ml-0.5 animate-twinkle">✨</span>
+                </div>
+              )}
+
+              {/* Majestic Geometric overlays with optional Islamic rotation */}
+              <div className={`absolute top-0 right-0 w-[500px] h-[500px] border-[24px] border-white/5 rounded-full -mr-64 -mt-64 pointer-events-none ${settings.islamicMotion !== 'off' ? 'animate-spin-slow' : ''}`}></div>
+              <div className={`absolute top-0 right-0 w-[400px] h-[400px] border border-accent-gold/10 rotate-45 -mr-40 -mt-40 pointer-events-none ${settings.islamicMotion !== 'off' ? 'animate-spin-reverse-slow' : ''}`}></div>
               <div className="absolute bottom-0 left-0 w-32 h-32 border-[2px] border-white/5 rounded-full -ml-16 -mb-16 pointer-events-none"></div>
 
               <div className="flex flex-col items-center md:items-start text-center md:text-left gap-1 z-10">
@@ -799,23 +954,62 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Countdown panel */}
+              {/* Countdown panel with real-time hours, minutes, and seconds auto decrement */}
               <div className="flex flex-col items-center md:items-end text-center md:text-right p-5 bg-[#0c180e]/50 backdrop-blur-md rounded-2xl border border-accent-gold/20 shrink-0 z-10 shadow-inner">
-                <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full">
+                <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-gold animate-ping" />
                   {settings.language === 'bn' ? 'পরবর্তী ওয়াক্ত' : 'UPCOMING PRAYER'}
                 </span>
-                <span className="text-xl font-black text-white mt-2.5">
+                <span className="text-xl font-black text-white mt-2">
                   {settings.language === 'bn' ? nextPrayer.nameBn : nextPrayer.nameEn}
                   <span className="text-[11px] text-accent-gold font-bold ml-1.5 uppercase font-sans">
                      ({ { fajr: 'Subhe Sadiq', dhuhr: 'Zohr', asr: 'Asr', maghrib: 'Maghrib', isha: 'Isha' }[nextPrayer.id] || ''})
                   </span>
                 </span>
-                <span className="text-xs text-white mt-2.5 bg-primary-green/60 p-1.5 px-3 rounded-xl border border-white/10 tracking-wide font-medium">
-                  {settings.language === 'bn' ? 'বাকিঃ ' : 'Time remaining: '}
-                  <span className="font-extrabold text-accent-gold font-mono">
-                    {formatCountdown(minutesRemaining, settings.language)}
+                
+                {/* Real-time Hour-Minute-Second Decrementing Countdown Unit */}
+                <div className="mt-3 flex flex-col items-center md:items-end gap-1.5">
+                  <div className="flex items-center gap-1 font-mono text-white text-xs font-black">
+                    {/* Hour box */}
+                    <div className="flex flex-col items-center bg-black/45 border border-accent-gold/30 px-2.5 py-1.5 rounded-xl min-w-[48px] shadow-sm">
+                      <span className="text-base text-accent-gold font-bold">
+                        {settings.language === 'bn' ? toBanglaNum(String(countdownHMS.hours).padStart(2, '0')) : String(countdownHMS.hours).padStart(2, '0')}
+                      </span>
+                      <span className="text-[8px] text-gray-300 font-sans uppercase">
+                        {settings.language === 'bn' ? 'ঘণ্টা' : 'HR'}
+                      </span>
+                    </div>
+                    <span className="text-accent-gold font-bold text-base -mt-2 animate-pulse">:</span>
+
+                    {/* Minute box */}
+                    <div className="flex flex-col items-center bg-black/45 border border-accent-gold/30 px-2.5 py-1.5 rounded-xl min-w-[48px] shadow-sm">
+                      <span className="text-base text-white font-bold">
+                        {settings.language === 'bn' ? toBanglaNum(String(countdownHMS.minutes).padStart(2, '0')) : String(countdownHMS.minutes).padStart(2, '0')}
+                      </span>
+                      <span className="text-[8px] text-gray-300 font-sans uppercase">
+                        {settings.language === 'bn' ? 'মিনিট' : 'MIN'}
+                      </span>
+                    </div>
+                    <span className="text-accent-gold font-bold text-base -mt-2 animate-pulse">:</span>
+
+                    {/* Second box (decreases every second!) */}
+                    <div className="flex flex-col items-center bg-black/45 border border-accent-gold/30 px-2.5 py-1.5 rounded-xl min-w-[48px] shadow-sm">
+                      <span className="text-base text-accent-gold font-bold">
+                        {settings.language === 'bn' ? toBanglaNum(String(countdownHMS.seconds).padStart(2, '0')) : String(countdownHMS.seconds).padStart(2, '0')}
+                      </span>
+                      <span className="text-[8px] text-gray-300 font-sans uppercase">
+                        {settings.language === 'bn' ? 'সেকেন্ড' : 'SEC'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <span className="text-[11px] text-white/90 font-medium tracking-wide bg-primary-green/50 py-1 px-2.5 rounded-lg border border-white/10 mt-0.5">
+                    {settings.language === 'bn' ? 'সময় বাকিঃ ' : 'Time remaining: '}
+                    <span className="font-extrabold text-accent-gold font-mono">
+                      {countdownHMS.formattedText}
+                    </span>
                   </span>
-                </span>
+                </div>
               </div>
             </div>
 
@@ -851,7 +1045,7 @@ export default function App() {
                   let cardBg = 'bg-white dark:bg-zinc-900 border border-primary-green/5 dark:border-neutral-800 hover:border-accent-gold/20 shadow-sm hover:shadow-md';
                   
                   if (isCurrent && p.type !== 'marker') {
-                    cardBg = 'bg-primary-green text-white border-none shadow-xl scale-[1.02] ring-4 ring-accent-gold z-10';
+                    cardBg = `bg-primary-green text-white border-none shadow-xl scale-[1.02] ring-4 ring-accent-gold z-10 ${settings.ambientMotionEnabled !== false ? 'active-waqt-gold-wave' : ''}`;
                   } else if (isUpcoming && p.type !== 'marker') {
                     cardBg = 'bg-emerald-50/70 dark:bg-zinc-900/40 border border-accent-gold/30 dark:border-accent-gold/20 ring-4 ring-primary-green/10 dark:ring-accent-gold/10 animate-pulse';
                   } else if (p.type === 'marker') {
@@ -1099,51 +1293,111 @@ export default function App() {
         {activeTab === 'more' && (
           <div className="flex flex-col gap-6">
             
-            {/* Horizontal sub selectors toolbar navbar */}
-            <div className="flex gap-2 border-b border-gray-100 dark:border-neutral-800 pb-3 select-none overflow-x-auto scrollbar-none">
-              <button
-                onClick={() => setMoreSubTab('duas')}
-                className={`py-2 px-4 whitespace-nowrap text-xs font-extrabold rounded-full border transition-all pointer-events-auto cursor-pointer ${
-                  moreSubTab === 'duas'
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                    : 'bg-white dark:bg-zinc-900 border-gray-100 dark:border-neutral-800 text-gray-700 dark:text-gray-300'
-                }`}
-              >
-                📖 {settings.language === 'bn' ? 'আমল ও দোয়া ভান্ডার' : 'Duas & Azkar'}
-              </button>
+            {/* 100% Responsive Islamic Mobile & Desktop Tool Switcher Bar */}
+            <div className="p-3 sm:p-4 bg-gradient-to-r from-emerald-500/10 via-emerald-600/5 to-amber-500/10 dark:from-zinc-950 dark:via-zinc-900 dark:to-neutral-900 rounded-3xl border border-emerald-500/20 shadow-sm flex flex-col gap-3 select-none">
+              
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
+                <div>
+                  <h3 className="text-sm font-black text-gray-900 dark:text-white flex items-center gap-1.5">
+                    <span>🌟</span>
+                    <span>{settings.language === 'bn' ? 'অন্যান্য আমল ও প্রয়োজনীয় ফিচারসমূহ' : 'Islamic Utilities & More Deeds'}</span>
+                  </h3>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                    {settings.language === 'bn' 
+                      ? 'আমল ও দোয়া ভান্ডার, যাকাত ক্যালকুলেটর, নামাজ ট্র্যাকার ও সেটিংস কাস্টমাইজার' 
+                      : 'Duas, Zakat, Prayer attendance tracker & complete theme settings'}
+                  </p>
+                </div>
+              </div>
 
-              <button
-                onClick={() => setMoreSubTab('zakat')}
-                className={`py-2 px-4 whitespace-nowrap text-xs font-extrabold rounded-full border transition-all pointer-events-auto cursor-pointer ${
-                  moreSubTab === 'zakat'
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                    : 'bg-white dark:bg-zinc-900 border-gray-100 dark:border-neutral-800 text-gray-700 dark:text-gray-300'
-                }`}
-              >
-                ৳ {settings.language === 'bn' ? 'জাকাত ক্যালকুলেটর' : 'Zakat Calc'}
-              </button>
+              {/* 4 Responsive Buttons: 2x2 on Mobile, 1x4 on Tablet/Desktop */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                
+                {/* 1. Duas & Azkar */}
+                <button
+                  onClick={() => setMoreSubTab('duas')}
+                  id="tab-btn-duas"
+                  className={`py-3 px-3 rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-center sm:text-left cursor-pointer active:scale-95 ${
+                    moreSubTab === 'duas'
+                      ? 'theme-btn shadow-md ring-2 ring-emerald-500/40 font-bold'
+                      : 'bg-white dark:bg-zinc-900 border-gray-200 dark:border-neutral-800 text-gray-800 dark:text-gray-200 hover:bg-emerald-50/60 dark:hover:bg-zinc-800'
+                  }`}
+                >
+                  <span className="text-xl sm:text-lg">📖</span>
+                  <div className="min-w-0">
+                    <span className="text-xs font-black block truncate">
+                      {settings.language === 'bn' ? 'আমল ও দোয়া' : 'Duas & Azkar'}
+                    </span>
+                    <span className={`text-[10px] block truncate font-medium ${moreSubTab === 'duas' ? 'opacity-90' : 'text-gray-400 dark:text-gray-500'}`}>
+                      {settings.language === 'bn' ? 'দো‘আ ভান্ডার' : 'Supplications'}
+                    </span>
+                  </div>
+                </button>
 
-              <button
-                onClick={() => setMoreSubTab('tracker')}
-                className={`py-2 px-4 whitespace-nowrap text-xs font-extrabold rounded-full border transition-all pointer-events-auto cursor-pointer ${
-                  moreSubTab === 'tracker'
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                    : 'bg-white dark:bg-zinc-900 border-gray-100 dark:border-neutral-800 text-gray-700 dark:text-gray-300'
-                }`}
-              >
-                📊 {settings.language === 'bn' ? 'নামাজ ট্র্যাকার' : 'Prayer Tracker Logs'}
-              </button>
+                {/* 2. Zakat Calculator */}
+                <button
+                  onClick={() => setMoreSubTab('zakat')}
+                  id="tab-btn-zakat"
+                  className={`py-3 px-3 rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-center sm:text-left cursor-pointer active:scale-95 ${
+                    moreSubTab === 'zakat'
+                      ? 'theme-btn shadow-md ring-2 ring-emerald-500/40 font-bold'
+                      : 'bg-white dark:bg-zinc-900 border-gray-200 dark:border-neutral-800 text-gray-800 dark:text-gray-200 hover:bg-emerald-50/60 dark:hover:bg-zinc-800'
+                  }`}
+                >
+                  <span className="text-xl sm:text-lg">৳</span>
+                  <div className="min-w-0">
+                    <span className="text-xs font-black block truncate">
+                      {settings.language === 'bn' ? 'যাকাত হিসাব' : 'Zakat Calc'}
+                    </span>
+                    <span className={`text-[10px] block truncate font-medium ${moreSubTab === 'zakat' ? 'opacity-90' : 'text-gray-400 dark:text-gray-500'}`}>
+                      {settings.language === 'bn' ? 'নিসাব ও হিসাব' : 'Nisab Calculator'}
+                    </span>
+                  </div>
+                </button>
 
-              <button
-                onClick={() => setMoreSubTab('settings')}
-                className={`py-2 px-4 whitespace-nowrap text-xs font-extrabold rounded-full border transition-all pointer-events-auto cursor-pointer ${
-                  moreSubTab === 'settings'
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                    : 'bg-white dark:bg-zinc-900 border-gray-100 dark:border-neutral-800 text-gray-700 dark:text-gray-300'
-                }`}
-              >
-                ⚙️ {settings.language === 'bn' ? 'সেটিংস' : 'System Setup'}
-              </button>
+                {/* 3. Prayer Tracker */}
+                <button
+                  onClick={() => setMoreSubTab('tracker')}
+                  id="tab-btn-tracker"
+                  className={`py-3 px-3 rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-center sm:text-left cursor-pointer active:scale-95 ${
+                    moreSubTab === 'tracker'
+                      ? 'theme-btn shadow-md ring-2 ring-emerald-500/40 font-bold'
+                      : 'bg-white dark:bg-zinc-900 border-gray-200 dark:border-neutral-800 text-gray-800 dark:text-gray-200 hover:bg-emerald-50/60 dark:hover:bg-zinc-800'
+                  }`}
+                >
+                  <span className="text-xl sm:text-lg">📊</span>
+                  <div className="min-w-0">
+                    <span className="text-xs font-black block truncate">
+                      {settings.language === 'bn' ? 'নামাজ ট্র্যাকার' : 'Prayer Tracker'}
+                    </span>
+                    <span className={`text-[10px] block truncate font-medium ${moreSubTab === 'tracker' ? 'opacity-90' : 'text-gray-400 dark:text-gray-500'}`}>
+                      {settings.language === 'bn' ? 'হাজিরা ও স্কোর' : 'Logs & Attendance'}
+                    </span>
+                  </div>
+                </button>
+
+                {/* 4. Theme & Settings */}
+                <button
+                  onClick={() => setMoreSubTab('settings')}
+                  id="tab-btn-settings"
+                  className={`py-3 px-3 rounded-2xl border transition-all flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-2 text-center sm:text-left cursor-pointer active:scale-95 ${
+                    moreSubTab === 'settings'
+                      ? 'theme-btn shadow-md ring-2 ring-emerald-500/40 font-bold'
+                      : 'bg-white dark:bg-zinc-900 border-gray-200 dark:border-neutral-800 text-gray-800 dark:text-gray-200 hover:bg-emerald-50/60 dark:hover:bg-zinc-800'
+                  }`}
+                >
+                  <span className="text-xl sm:text-lg">⚙️</span>
+                  <div className="min-w-0">
+                    <span className="text-xs font-black block truncate">
+                      {settings.language === 'bn' ? 'থিম ও সেটিংস' : 'Theme & Settings'}
+                    </span>
+                    <span className={`text-[10px] block truncate font-medium ${moreSubTab === 'settings' ? 'opacity-90' : 'text-gray-400 dark:text-gray-500'}`}>
+                      {settings.language === 'bn' ? 'রং, মোশন ও ফন্ট' : 'Customizer'}
+                    </span>
+                  </div>
+                </button>
+
+              </div>
             </div>
 
             {/* DUAS ARCHIVE IMPLEMENTATION INDEX */}
@@ -1151,8 +1405,8 @@ export default function App() {
               <div id="duas-list-screen" className="flex flex-col gap-5">
                 
                 {/* Search query input */}
-                <div className="p-5 bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-neutral-800 rounded-3xl shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center select-none">
-                  <div className="relative w-full max-w-md">
+                <div className="p-4 sm:p-5 bg-white dark:bg-zinc-900 border border-emerald-100 dark:border-neutral-800 rounded-3xl shadow-sm flex flex-col md:flex-row gap-3 sm:gap-4 justify-between items-stretch md:items-center select-none">
+                  <div className="relative w-full md:max-w-md">
                     <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
                     <input
                       type="text"
@@ -1163,12 +1417,12 @@ export default function App() {
                     />
                   </div>
 
-                  <div className="flex items-center gap-3 shrink-0 w-full md:w-auto">
+                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 shrink-0 w-full md:w-auto">
                     {/* Category Dropdown */}
                     <select
                       value={selectedDuaCat}
                       onChange={(e) => setSelectedDuaCat(e.target.value)}
-                      className="text-xs h-9 px-3 border border-emerald-100 dark:border-neutral-800 bg-emerald-50/10 dark:bg-zinc-950 text-emerald-950 dark:text-emerald-100 rounded-lg outline-none cursor-pointer"
+                      className="text-xs h-9 px-3 border border-emerald-100 dark:border-neutral-800 bg-emerald-50/10 dark:bg-zinc-950 text-emerald-950 dark:text-emerald-100 rounded-lg outline-none cursor-pointer flex-1 sm:flex-initial min-w-[140px]"
                     >
                       <option value="all">{settings.language === 'bn' ? 'সব বিভাগ' : 'All Categories'}</option>
                       <option value="prayer">{settings.language === 'bn' ? 'নামাজের দুআ' : 'Prayer\'s Duas'}</option>
@@ -1186,7 +1440,7 @@ export default function App() {
                     {/* Bookmarks toggle list */}
                     <button
                       onClick={() => setShowOnlyBookmarks(!showOnlyBookmarks)}
-                      className={`h-9 px-3 text-xs font-bold rounded-lg border flex items-center justify-center gap-1 transition ${
+                      className={`h-9 px-3 text-xs font-bold rounded-lg border flex items-center justify-center gap-1 transition shrink-0 ${
                         showOnlyBookmarks
                           ? 'bg-amber-500 border-amber-500 text-white'
                           : 'bg-white dark:bg-zinc-900 border-emerald-100 dark:border-neutral-800 text-gray-700 dark:text-gray-300'
@@ -1351,15 +1605,14 @@ export default function App() {
             <button
               onClick={() => {
                 setActiveTab('more');
-                setMoreSubTab('duas');
               }}
               id="mobile-tab-more"
               className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition ${
                 activeTab === 'more' ? 'text-accent-gold bg-white/10' : 'text-white/60 hover:text-white'
               }`}
             >
-              <span className="text-sm block leading-none">💬</span>
-              <span>{settings.language === 'bn' ? 'অন্যান্য' : 'More'}</span>
+              <BookOpen className="w-5 h-5 flex-shrink-0" />
+              <span className="truncate">{settings.language === 'bn' ? 'অন্যান্য আমল' : 'Deeds'}</span>
             </button>
 
           </div>

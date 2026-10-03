@@ -387,21 +387,46 @@ export function toBanglaNum(num: string | number): string {
   return num.toString().split('').map(char => numMap[char] || char).join('');
 }
 
-// Human friendly countdown time formatter
-export function formatCountdown(minutes: number, lang: 'bn' | 'en'): string {
-  if (minutes < 0) return '';
-  const hours = Math.floor(minutes / 60);
-  const mins = Math.floor(minutes % 60);
+// Human friendly countdown time formatter with hours, minutes, and seconds
+export function formatCountdownHMS(totalSeconds: number, lang: 'bn' | 'en'): {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  formattedText: string;
+  timeString: string;
+} {
+  if (totalSeconds < 0) totalSeconds = 0;
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
 
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  const timeString = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+
+  let formattedText = '';
   if (lang === 'bn') {
     if (hours > 0) {
-      return `${toBanglaNum(hours)} ঘণ্টা ${toBanglaNum(mins)} মিনিট`;
+      formattedText = `${toBanglaNum(hours)} ঘণ্টা ${toBanglaNum(minutes)} মিনিট ${toBanglaNum(seconds)} সেকেন্ড`;
+    } else if (minutes > 0) {
+      formattedText = `${toBanglaNum(minutes)} মিনিট ${toBanglaNum(seconds)} সেকেন্ড`;
+    } else {
+      formattedText = `${toBanglaNum(seconds)} সেকেন্ড`;
     }
-    return `${toBanglaNum(mins)} মিনিট`;
   } else {
     if (hours > 0) {
-      return `${hours} hour ${mins} min`;
+      formattedText = `${hours}h ${minutes}m ${seconds}s`;
+    } else if (minutes > 0) {
+      formattedText = `${minutes}m ${seconds}s`;
+    } else {
+      formattedText = `${seconds}s`;
     }
-    return `${mins} min`;
   }
+
+  return { hours, minutes, seconds, formattedText, timeString };
+}
+
+// Human friendly countdown time formatter (supports either total seconds or minutes)
+export function formatCountdown(timeRemaining: number, lang: 'bn' | 'en', isSeconds: boolean = true): string {
+  const totalSecs = isSeconds ? timeRemaining : timeRemaining * 60;
+  return formatCountdownHMS(totalSecs, lang).formattedText;
 }
